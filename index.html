@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MS Solar Powercorp Pvt. Ltd. - Power Your Future</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #0A0A0A; /* Chrome Black */
+            --text-color: #EAEAEA;
+            --primary-color: #FFD700; /* Solar Yellow */
+            --secondary-color: #00A8FF; /* Electric Blue */
+            --surface-color: #181818;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            scroll-behavior: smooth;
+        }
+
+        /* --- Intro Animation --- */
+        #intro-animation { /* ... remains the same ... */ }
+
+        /* --- Main Content --- */
+        #main-content { opacity: 1; /* Changed for immediate visibility */ }
+
+        /* --- General Styling --- */
+        .navbar {
+            background-color: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(12px);
+            font-family: 'Orbitron', sans-serif;
+        }
+        .navbar-brand { color: var(--primary-color) !important; }
+        .nav-link { color: var(--text-color) !important; }
+        .nav-link:hover, .nav-link.active { color: var(--primary-color) !important; }
+
+        /* --- Hero Section with Video --- */
+        .hero-section {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+        #hero-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -100;
+            transform: translateX(-50%) translateY(-50%);
+            background-size: cover;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: -50;
+        }
+        .hero-section .container {
+            z-index: 1;
+        }
+        .hero-section h1 { font-family: 'Orbitron', sans-serif; font-size: 3.8rem; color: white; text-shadow: 2px 2px 10px rgba(0,0,0,0.7); }
+        .hero-section .lead { color: var(--primary-color); font-size: 1.5rem; text-shadow: 1px 1px 5px rgba(0,0,0,0.5); }
+
+        .section { padding: 80px 0; }
+        .section-title { text-align: center; margin-bottom: 50px; font-family: 'Orbitron', sans-serif; font-size: 2.5rem; color: white; }
+
+        .service-card {
+            background-color: var(--surface-color);
+            border: 1px solid #222;
+            border-radius: 15px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            padding: 2rem;
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 0 30px var(--secondary-color);
+        }
+        .service-card .card-title { color: var(--primary-color); }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: #000;
+            border-radius: 50px;
+            padding: 12px 35px;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #ffd000;
+            border-color: #ffd000;
+            transform: scale(1.05);
+        }
+        
+        .form-control {
+            background-color: var(--surface-color);
+            border: 1px solid #333;
+            color: var(--text-color);
+        }
+        .form-control:focus {
+            background-color: var(--surface-color);
+            color: var(--text-color);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px var(--primary-color);
+        }
+
+        .footer {
+            background-color: #0A0A0A;
+            border-top: 1px solid #222;
+            padding: 40px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="main-content">
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+            <div class="container">
+                <a class="navbar-brand fw-bold" href="#">MS Solar Powercorp</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#calculator">Calculator</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section id="home" class="hero-section">
+            <div class="hero-overlay"></div>
+            <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop" id="hero-video">
+                <source src="https://videos.pexels.com/video-files/854129/854129-hd_1920_1080_25fps.mp4" type="video/mp4">
+            </video>
+            <div class="container">
+                <h1 class="display-4">Harness the Power of the Sun</h1>
+                <p class="lead">Leading the charge in renewable energy solutions.</p>
+                <a href="#contact" class="btn btn-primary btn-lg mt-3">Go Solar Today</a>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="section">
+            <div class="container">
+                <h2 class="section-title">Our Expertise</h2>
+                <div class="row g-4 justify-content-center">
+                    <div class="col-md-4">
+                        <div class="card service-card h-100 text-center">
+                            <div class="card-body">
+                                <i class="fa-solid fa-house-user fa-3x mb-3" style="color: var(--primary-color);"></i>
+                                <h5 class="card-title fw-bold">Residential Solar</h5>
+                                <p class="card-text">Power your home with clean energy. Custom installations to fit your needs and budget.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card service-card h-100 text-center">
+                            <div class="card-body">
+                                <i class="fa-solid fa-building fa-3x mb-3" style="color: var(--primary-color);"></i>
+                                <h5 class="card-title fw-bold">Commercial Solutions</h5>
+                                <p class="card-text">Reduce operating costs and boost your green credentials with our scalable solar systems.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EMI & Finance Calculator Section -->
+        <section id="calculator" class="section" style="background-color: #0A0A0A;">
+            <div class="container">
+                <h2 class="section-title">Finance Your Future</h2>
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="card p-4" style="background-color: var(--surface-color); border: 1px solid #222;">
+                            <div class="row g-3">
+                                <div class="col-md-6"><label class="form-label">Loan Amount (₹)</label><input type="number" class="form-control" id="loanAmount" placeholder="e.g., 500000"></div>
+                                <div class="col-md-6"><label class="form-label">Interest Rate (%)</label><input type="number" class="form-control" id="interestRate" placeholder="e.g., 8.5"></div>
+                                <div class="col-md-12"><label class="form-label">Loan Tenure (Years)</label><input type="number" class="form-control" id="loanTenure" placeholder="e.g., 5"></div>
+                            </div>
+                            <div class="text-center mt-4"><button class="btn btn-primary" onclick="calculateEMI()">Calculate EMI</button></div>
+                            <div id="emiResult" class="mt-4 text-center fs-4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section">
+            <div class="container">
+                <h2 class="section-title">Get in Touch</h2>
+                <div class="col-lg-6 mx-auto">
+                    <form>
+                        <div class="mb-3"><input type="text" class="form-control" placeholder="Your Name"></div>
+                        <div class="mb-3"><input type="email" class="form-control" placeholder="Your Email"></div>
+                        <div class="mb-3"><textarea class="form-control" rows="4" placeholder="How can we help?"></textarea></div>
+                        <div class="text-center"><button type="submit" class="btn btn-primary">Send Inquiry</button></div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer text-center">
+            <div class="container">
+                <p>&copy; 2025 MS Solar Powercorp Pvt. Ltd. All Rights Reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- EMI Calculator Script -->
+    <script>
+        function calculateEMI() {
+            const principal = parseFloat(document.getElementById('loanAmount').value);
+            const rate = parseFloat(document.getElementById('interestRate').value) / 100 / 12;
+            const tenure = parseFloat(document.getElementById('loanTenure').value) * 12;
+            const resultDiv = document.getElementById('emiResult');
+
+            if (principal > 0 && rate > 0 && tenure > 0) {
+                const emi = (principal * rate * Math.pow(1 + rate, tenure)) / (Math.pow(1 + rate, tenure) - 1);
+                resultDiv.innerHTML = `Your Monthly EMI is: <strong style="color: var(--primary-color);">₹${emi.toFixed(2)}</strong>`;
+            } else {
+                resultDiv.innerHTML = `<strong class="text-danger">Please enter valid numbers.</strong>`;
+            }
+        }
+    </script>
+</body>
+</html>
