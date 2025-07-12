@@ -337,7 +337,8 @@
                         </div>
                         
                         <!-- Contact Form -->
-                        <form>
+                        <div id="form-messages" class="mb-4 text-center hidden"></div>
+                        <form id="contactForm">
                             <div class="space-y-4">
                                 <div>
                                     <label for="name" class="block text-sm font-medium text-gray-400">Full Name</label>
@@ -346,6 +347,10 @@
                                 <div>
                                     <label for="email" class="block text-sm font-medium text-gray-400">Email Address</label>
                                     <input type="email" id="email" name="email" class="mt-1 block w-full px-3 py-2 bg-gray-800 border border-gray-600 text-white rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
+                                </div>
+                                <div>
+                                    <label for="phone" class="block text-sm font-medium text-gray-400">Phone Number</label>
+                                    <input type="tel" id="phone" name="phone" class="mt-1 block w-full px-3 py-2 bg-gray-800 border border-gray-600 text-white rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
                                 </div>
                                 <div>
                                     <label for="message" class="block text-sm font-medium text-gray-400">Message</label>
@@ -569,6 +574,44 @@
 
         // Initial calculation on page load
         calculateAndDisplay();
+
+        // Contact Form Submission
+        const contactForm = document.getElementById('contactForm');
+        const formMessages = document.getElementById('form-messages');
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbz7jCXosSGenPQQhNr9bVKw2pHFM3r580SqVen7qM1lV2FvUHFC3mWl9DstVmDKbXhj/exec'; // Your Google Apps Script URL
+
+        contactForm.addEventListener('submit', e => {
+            e.preventDefault(); // Prevent default form submission
+
+            formMessages.classList.remove('hidden', 'bg-green-500', 'bg-red-500');
+            formMessages.classList.add('bg-gray-700', 'text-white', 'p-3', 'rounded-md', 'mb-4');
+            formMessages.textContent = 'Sending message...';
+
+            fetch(scriptURL, { method: 'POST', body: new FormData(contactForm) })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.result === 'success') {
+                        formMessages.classList.remove('bg-gray-700');
+                        formMessages.classList.add('bg-green-500');
+                        formMessages.textContent = 'Message sent successfully! Redirecting...';
+                        contactForm.reset(); // Clear the form
+                        setTimeout(() => {
+                            window.location.href = '#home'; // Redirect to home section
+                            formMessages.classList.add('hidden'); // Hide message after redirect
+                        }, 2000); // Redirect after 2 seconds
+                    } else {
+                        formMessages.classList.remove('bg-gray-700');
+                        formMessages.classList.add('bg-red-500');
+                        formMessages.textContent = 'Error sending message: ' + (data.error || 'Unknown error');
+                    }
+                })
+                .catch(error => {
+                    formMessages.classList.remove('bg-gray-700');
+                    formMessages.classList.add('bg-red-500');
+                    formMessages.textContent = 'Network error: ' + error.message;
+                    console.error('Error!', error.message);
+                });
+        });
     </script>
 
 </body>
