@@ -6,7 +6,12 @@ import PageHeader from '../components/PageHeader';
 
 const BlogPostPage: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
-    const post = blogPosts.find(p => p.slug === slug);
+    
+    const postIndex = blogPosts.findIndex(p => p.slug === slug);
+    const post = blogPosts[postIndex];
+
+    const prevPost = postIndex > 0 ? blogPosts[postIndex - 1] : null;
+    const nextPost = postIndex < blogPosts.length - 1 ? blogPosts[postIndex + 1] : null;
 
     if (!post) {
         return (
@@ -57,10 +62,23 @@ const BlogPostPage: React.FC = () => {
                             {post.content}
                         </article>
 
-                        <div className="mt-12 pt-8 border-t border-border text-center">
-                            <Link to="/blog" className="px-8 py-3 bg-accent text-secondary font-bold rounded-full hover:opacity-90 transition-opacity">
-                                &larr; Back to All Articles
-                            </Link>
+                        <div className="mt-12 pt-8 border-t border-border flex justify-between items-start gap-4 sm:gap-8">
+                            <div className="w-1/2">
+                                {prevPost && (
+                                    <Link to={`/blog/${prevPost.slug}`} className="block text-left text-primary hover:underline group">
+                                        <span className="text-sm text-text-secondary">Previous Article</span>
+                                        <p className="font-bold group-hover:text-primary-dark line-clamp-2">&larr; {prevPost.title}</p>
+                                    </Link>
+                                )}
+                            </div>
+                            <div className="w-1/2">
+                                {nextPost && (
+                                    <Link to={`/blog/${nextPost.slug}`} className="block text-right text-primary hover:underline group">
+                                        <span className="text-sm text-text-secondary">Next Article</span>
+                                        <p className="font-bold group-hover:text-primary-dark line-clamp-2">{nextPost.title} &rarr;</p>
+                                    </Link>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>

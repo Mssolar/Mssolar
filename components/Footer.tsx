@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { NAV_LINKS } from '../constants';
+import { NAV_LINKS, CONTACT_INFO, APP_VERSION } from '../constants';
 
 const Footer: React.FC = () => {
     return (
@@ -19,15 +19,20 @@ const Footer: React.FC = () => {
                         <div>
                             <h4 className="font-semibold text-lg mb-4">Contact Us</h4>
                             <address className="not-italic text-gray-400 space-y-2">
-                                <p>p. no. 17, mansarover, jaipur</p>
+                                <p>{CONTACT_INFO.address}</p>
                                 <p>
-                                    <a href="tel:9057161333" className="hover:text-white">9057161333</a>, <a href="tel:9119377752" className="hover:text-white">9119377752</a>
+                                    {CONTACT_INFO.phones.slice(0, 2).map((phone, index) => (
+                                        <React.Fragment key={phone.number}>
+                                            <a href={`tel:${phone.number}`} className="hover:text-white">{phone.display}</a>
+                                            {index < 1 && ', '}
+                                        </React.Fragment>
+                                    ))}
                                 </p>
                                 <p>
-                                    <a href="mailto:contact@mssolar.in" className="hover:text-white">contact@mssolar.in</a>
+                                    <a href={`mailto:${CONTACT_INFO.email}`} className="hover:text-white">{CONTACT_INFO.email}</a>
                                 </p>
                                 <p>
-                                    <a href="https://mssolar.in/" target="_blank" rel="noopener noreferrer" className="hover:text-white">mssolar.in</a>
+                                    <a href={CONTACT_INFO.website} target="_blank" rel="noopener noreferrer" className="hover:text-white">mssolar.in</a>
                                 </p>
                             </address>
                         </div>
@@ -59,7 +64,7 @@ const Footer: React.FC = () => {
                 </div>
 
                 <div className="mt-12 border-t border-gray-700 pt-8 text-center text-gray-500">
-                    <p>&copy; {new Date().getFullYear()} MS Solar Powercorp Pvt. Ltd. All Rights Reserved.</p>
+                    <p>&copy; {new Date().getFullYear()} MS Solar Powercorp Pvt. Ltd. All Rights Reserved. | v{APP_VERSION}</p>
                 </div>
             </div>
         </footer>

@@ -15,7 +15,11 @@ const ChatPage: React.FC = () => {
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        chatRef.current = createChat();
+        try {
+            chatRef.current = createChat();
+        } catch (err: any) {
+            setError(`Failed to initialize chat: ${err.message}`);
+        }
     }, []);
 
     useEffect(() => {
@@ -34,14 +38,14 @@ const ChatPage: React.FC = () => {
 
         try {
             if (!chatRef.current) {
-                throw new Error("Chat not initialized");
+                throw new Error("Chat not initialized. Check for an API key error.");
             }
             const stream = await sendMessageStream(chatRef.current, input);
             
             let modelResponse = '';
             const modelMessageId = (Date.now() + 1).toString();
             
-            setMessages(prev => [...prev, { id: modelMessageId, role: 'model', text: '...' }]);
+            setMessages(prev => [...prev, { id: modelMessageId, role: 'model', text: '' }]);
 
             for await (const chunk of stream) {
                 modelResponse += chunk.text;
@@ -50,7 +54,7 @@ const ChatPage: React.FC = () => {
         } catch (err: any) {
             setError(err.message || 'An error occurred while sending the message.');
             const errorId = (Date.now() + 2).toString();
-            setMessages(prev => [...prev, { id: errorId, role: 'model', text: 'Sorry, something went wrong.' }]);
+            setMessages(prev => [...prev, { id: errorId, role: 'model', text: `Sorry, something went wrong: ${err.message}` }]);
         } finally {
             setIsLoading(false);
         }
@@ -67,7 +71,7 @@ const ChatPage: React.FC = () => {
                             </div>
                         </div>
                     ))}
-                    {isLoading && messages[messages.length - 1]?.role === 'user' && (
+                    {isLoading && messages[messages.length - 1]?.role !== 'model' && (
                          <div className="flex justify-start">
                             <div className="max-w-lg p-3 rounded-lg bg-background text-text-secondary">
                                 <Spinner />
@@ -77,7 +81,7 @@ const ChatPage: React.FC = () => {
                     <div ref={messagesEndRef} />
                 </div>
                 <div className="p-4 border-t border-border">
-                    {error && <p className="text-red-400 text-sm mb-2">{error}</p>}
+                    {error && <p className="text-red-400 text-sm mb-2 text-center">{error}</p>}
                     <form onSubmit={handleSend} className="flex gap-4">
                         <input
                             type="text"
@@ -85,9 +89,9 @@ const ChatPage: React.FC = () => {
                             onChange={(e) => setInput(e.target.value)}
                             placeholder="Type your message..."
                             className="flex-1 p-3 bg-background border border-border rounded-md focus:ring-2 focus:ring-primary focus:outline-none transition"
-                            disabled={isLoading}
+                            disabled={isLoading || !!error}
                         />
-                        <button type="submit" disabled={isLoading || !input} className="px-6 py-3 bg-primary text-white font-bold rounded-md hover:bg-primary-hover disabled:bg-gray-500 disabled:cursor-not-allowed transition-colors">
+                        <button type="submit" disabled={isLoading || !input || !!error} className="px-6 py-3 bg-primary text-white font-bold rounded-md hover:bg-primary-dark disabled:bg-gray-500 disabled:cursor-not-allowed transition-colors">
                             Send
                         </button>
                     </form>

@@ -1,5 +1,8 @@
+
 import React, { useState } from 'react';
 import type { QuoteFormData } from '../types';
+import { submitToGoogleSheet } from '../services/googleSheetService';
+import Spinner from './Spinner';
 
 interface QuotePopupProps {
     onClose: () => void;
@@ -7,16 +10,20 @@ interface QuotePopupProps {
 
 const QuotePopup: React.FC<QuotePopupProps> = ({ onClose }) => {
     const [formData, setFormData] = useState<QuoteFormData>({ name: '', phone: '', email: '', message: '' });
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // This is a placeholder for form submission.
-        // It now just shows a success message without sending data.
+        if (isSubmitting) return;
+        
+        setIsSubmitting(true);
+        await submitToGoogleSheet(formData);
+        setIsSubmitting(false);
         setIsSubmitted(true);
     };
 
@@ -33,9 +40,15 @@ const QuotePopup: React.FC<QuotePopupProps> = ({ onClose }) => {
                 <p className="text-text-secondary mb-6">Fill out the form below and we'll get back to you shortly.</p>
 
                 {isSubmitted ? (
-                    <div className="text-center py-10">
-                        <p className="text-lg mb-4 text-primary">Thank you! Your quote request has been submitted successfully.</p>
-                         <button onClick={onClose} className="mt-4 px-6 py-2 bg-primary text-white font-bold rounded-full hover:bg-primary-dark transition-colors duration-300">
+                    <div className="text-center py-10 flex flex-col items-center">
+                        <div className="bg-primary p-3 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <p className="text-xl font-semibold text-primary mt-4">Thank You!</p>
+                        <p className="text-text-secondary mt-1">Your quote request has been submitted successfully.</p>
+                         <button onClick={onClose} className="mt-6 px-6 py-2 bg-primary text-white font-bold rounded-full hover:bg-primary-dark transition-colors duration-300">
                             Close
                         </button>
                     </div>
@@ -57,8 +70,8 @@ const QuotePopup: React.FC<QuotePopupProps> = ({ onClose }) => {
                             <label htmlFor="popup-message" className="sr-only">Additional Comments</label>
                             <textarea name="message" id="popup-message" rows={3} required value={formData.message} onChange={handleChange} placeholder="Additional Comments" className="mt-1 block w-full px-3 py-2 bg-background border border-border rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"></textarea>
                         </div>
-                        <button type="submit" className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-bold text-white bg-accent hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent transition-all">
-                            Get My Free Quote
+                        <button type="submit" disabled={isSubmitting} className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-bold text-white bg-accent hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent transition-all disabled:bg-gray-500 disabled:cursor-not-allowed">
+                            {isSubmitting ? <Spinner /> : 'Get My Free Quote'}
                         </button>
                     </form>
                 )}

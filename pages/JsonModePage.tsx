@@ -69,8 +69,14 @@ const JsonModePage: React.FC = () => {
                 {!isLoading && rawJson && (
                     <div className="mt-6">
                         <h3 className="text-xl font-bold mb-2">Raw JSON Response:</h3>
-                        <pre className="bg-background p-4 rounded-md border border-border text-sm text-green-300 overflow-x-auto">
-                            <code>{JSON.stringify(JSON.parse(rawJson), null, 2)}</code>
+                        <pre className="bg-secondary p-4 rounded-md border border-border text-sm text-green-300 overflow-x-auto">
+                            <code>{(() => {
+                                try {
+                                    return JSON.stringify(JSON.parse(rawJson), null, 2);
+                                } catch {
+                                    return rawJson; // Fallback to raw string if it's not valid JSON
+                                }
+                            })()}</code>
                         </pre>
                     </div>
                 )}

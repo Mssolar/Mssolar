@@ -60,6 +60,7 @@ const HomePage: React.FC<HomePageProps> = ({ onGetQuoteClick }) => {
                         loop
                         muted
                         playsInline
+                        poster="https://ik.imagekit.io/mssolar/MS%20SOLAR%201.png?updatedAt=1754762614576"
                         className="w-full h-full object-cover opacity-40"
                     >
                         Your browser does not support the video tag.

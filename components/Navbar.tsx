@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useLocation } from 'react-router-dom';
 import { NAV_LINKS } from '../constants';
 
 // Use direct URL for the logo
@@ -7,7 +8,7 @@ const logoUrl = 'https://ik.imagekit.io/mssolar/LOGO.jpeg?updatedAt=175474586311
 
 const Logo = () => (
     <Link to="/" className="flex items-center">
-        <img src={logoUrl} alt="MS Solar Powercorp Logo" className="h-14" />
+        <img src={logoUrl} alt="MS Solar Powercorp Logo" className="h-12 md:h-14" />
     </Link>
 );
 
@@ -17,6 +18,10 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ onGetQuoteClick }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const location = useLocation();
+
+    // These are navigation sections that have child pages.
+    const sectionParents = ['/services', '/blog'];
 
     const linkClasses = "text-text-primary hover:text-primary transition-colors duration-300 font-medium";
     const activeLinkClasses = "text-primary";
@@ -32,7 +37,11 @@ const Navbar: React.FC<NavbarProps> = ({ onGetQuoteClick }) => {
                                 <NavLink
                                     key={link.name}
                                     to={link.path}
-                                    className={({ isActive }) => `${linkClasses} ${isActive ? activeLinkClasses : ''}`}
+                                    className={({ isActive }) => {
+                                        // Make parent links active for their child routes.
+                                        const isParentActive = sectionParents.some(parent => location.pathname.startsWith(parent) && link.path === parent);
+                                        return `${linkClasses} ${isActive || isParentActive ? activeLinkClasses : ''}`;
+                                    }}
                                 >
                                     {link.name}
                                 </NavLink>
@@ -67,7 +76,10 @@ const Navbar: React.FC<NavbarProps> = ({ onGetQuoteClick }) => {
                                     key={link.name}
                                     to={link.path}
                                     onClick={() => setIsOpen(false)}
-                                    className={({ isActive }) => `text-center py-2 rounded-md ${linkClasses} ${isActive ? activeLinkClasses : ''}`}
+                                    className={({ isActive }) => {
+                                        const isParentActive = sectionParents.some(parent => location.pathname.startsWith(parent) && link.path === parent);
+                                        return `text-center py-2 rounded-md ${linkClasses} ${isActive || isParentActive ? activeLinkClasses : ''}`;
+                                    }}
                                 >
                                     {link.name}
                                 </NavLink>
