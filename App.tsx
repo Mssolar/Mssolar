@@ -4,6 +4,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 
 // Layouts
 import MainLayout from './components/MainLayout';
+import ShowcaseLayout from './components/ShowcaseLayout';
 
 // Main Site Pages
 import HomePage from './pages/HomePage';
@@ -25,6 +26,14 @@ import BatteryStoragePage from './pages/services/BatteryStoragePage';
 import SolarFinancingPage from './pages/services/SolarFinancingPage';
 import SolarLightingPage from './pages/services/SolarLightingPage';
 
+// Showcase Pages
+import ShowcaseHomePage from './pages/ShowcaseHomePage';
+import TextGenerationPage from './pages/TextGenerationPage';
+import ImageGenerationPage from './pages/ImageGenerationPage';
+import ChatPage from './pages/ChatPage';
+import JsonModePage from './pages/JsonModePage';
+import SearchGroundingPage from './pages/SearchGroundingPage';
+
 const App: React.FC = () => {
   const { pathname } = useLocation();
   const [isQuotePopupOpen, setIsQuotePopupOpen] = useState(false);
@@ -34,6 +43,11 @@ const App: React.FC = () => {
   }, [pathname]);
 
   useEffect(() => {
+    // Do not show the quote popup on showcase pages
+    if (pathname.startsWith('/showcase')) {
+        return;
+    }
+    
     const hasSeenPopup = sessionStorage.getItem('hasSeenQuotePopup');
     if (!hasSeenPopup) {
       const timer = setTimeout(() => {
@@ -76,6 +90,16 @@ const App: React.FC = () => {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:slug" element={<BlogPostPage />} />
+      </Route>
+      
+      {/* Gemini API Showcase Routes */}
+      <Route path="/showcase" element={<ShowcaseLayout />}>
+          <Route index element={<ShowcaseHomePage />} />
+          <Route path="text" element={<TextGenerationPage />} />
+          <Route path="image" element={<ImageGenerationPage />} />
+          <Route path="chat" element={<ChatPage />} />
+          <Route path="json" element={<JsonModePage />} />
+          <Route path="search" element={<SearchGroundingPage />} />
       </Route>
     </Routes>
   );
